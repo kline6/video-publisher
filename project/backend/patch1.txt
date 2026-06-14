@@ -1,0 +1,52 @@
+*** Begin Patch
+*** Update File: src/services/ai.service.ts
+@@ getHistory() {
+ 
+   async getHistory(userId: number, type?: string): Promise<AiGeneration[]> {
+@@ private async logGen() {
++  async optimizeTopic(userId: number, keywords: string, platform?: string, modelOverride?: string): Promise<string[]> {
++    const cfg = await getAiConfig(userId, modelOverride);
++    const client = getClient(cfg);
++
++    const platformHint = platform ? `，目标平台是${platform}` : '';
++    const systemPrompt = "你是一个短视频选题专家。根据用户提供的关键词，生成5个吸引人的视频主题建议。" +
++      "主题要简短有力（15-25字），能引起观众好奇心，适合短视频平台传播。" +
++      "直接返回JSON数组格式：[\"主题1\", \"主题2\", \"主题3\", \"主题4\", \"主题5\"]，不要任何其他文字。";
++    const userPrompt = `关键词：${keywords}${platformHint}`;
++
++    if (!client) {
++      // 本地模板：基于关键词生成5个主题
++      const fallback = [
++        keywords + "，这5个技巧改变了我的生活",
++        "99%的人不知道的" + keywords + "真相",
++        keywords + "新手必看！3分钟从小白到高手",
++        "为什么" + keywords + "突然火了？真相让人震惊",
++        keywords + "避坑指南，这些错误千万别犯",
++      ];
++      await this.logGen(userId, "optimize_topic", keywords, JSON.stringify(fallback), "local-template");
++      return fallback;
++    }
++
++    const response = await client.chat.completions.create({
++      model: cfg.model,
++      messages: [
++        { role: "system", content: systemPrompt },
++        { role: "user", content: userPrompt },
++      ],
++      temperature: 0.9,
++      max_tokens: 500,
++    });
++
++    const content = response.choices[0]?.message?.content || "[]";
++    await this.logGen(userId, "optimize_topic", keywords, content, cfg.model, response.usage?.total_tokens);
++
++    try {
++      const jsonMatch = content.match(/\[[\s\S]*\]/);
++      if (jsonMatch) return JSON.parse(jsonMatch[0]);
++      return content.split("\n").filter((l: string) => l.trim()).map((l: string) => l.replace(/^\d+\.\s*/, "").replace(/^[-•]\s*/, ""));
++    } catch {
++      return [content];
++    }
++  }
++
+*** End Patch

@@ -1,0 +1,26 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "VideoFlow-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 6060,
+      "cwd": "project/VideoFlow-web"
+    },
+    {
+      "name": "VideoFlow-server",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["nx", "serve", "VideoFlow-server"],
+      "port": 3002,
+      "cwd": "project/VideoFlow-backend"
+    },
+    {
+      "name": "VideoFlow-ai",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["nx", "serve", "VideoFlow-ai"],
+      "port": 3010,
+      "cwd": "project/VideoFlow-backend"
+    }
+  ]
+}

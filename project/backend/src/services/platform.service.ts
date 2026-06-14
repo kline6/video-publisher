@@ -1,0 +1,305 @@
+import { Pool } from "pg";
+import { config } from "../config";
+import { PlatformAccount, Platform } from "../types";
+import { logger } from "../utils/logger";
+import { bilibiliPublisher } from "./platforms/bilibili.pub";
+import { douyinPublisher } from "./platforms/douyin.pub";
+import { kuaishouPublisher } from "./platforms/kuaishou.pub";
+import { douyinApiService } from "./platforms/douyin.api";
+
+const pool = new Pool({
+  host: config.db.host,
+  port: config.db.port,
+  user: config.db.username,
+  password: config.db.password,
+  database: config.db.database,
+});
+
+interface BilibiliAccountData {
+  sessdata: string;
+  bili_jct: string;
+  dedeuserid: string;
+}
+
+export class PlatformService {
+  async getAccounts(userId: number): Promise<PlatformAccount[]> {
+    const result = await pool.query(
+      "SELECT id, user_id, platform, platform_user_id, nickname, avatar_url, status, extra_data, created_at, updated_at FROM platform_accounts WHERE user_id = $1 ORDER BY created_at DESC",
+      [userId]
+    );
+    return result.rows;
+  }
+
+  async getAccountById(accountId: number, userId: number): Promise<PlatformAccount | null> {
+    const result = await pool.query("SELECT * FROM platform_accounts WHERE id = $1 AND user_id = $2", [accountId, userId]);
+    return result.rows[0] || null;
+  }
+
+  async getAccountsByPlatform(userId: number, platform: Platform): Promise<PlatformAccount[]> {
+    const result = await pool.query(
+      "SELECT * FROM platform_accounts WHERE user_id = $1 AND platform = $2 AND status = $3",
+      [userId, platform, "active"]
+    );
+    return result.rows;
+  }
+
+  async upsertAccount(userId: number, data: {
+    platform: Platform; platform_user_id: string; access_token: string;
+    refresh_token?: string; expires_at?: Date; nickname?: string;
+    avatar_url?: string; extra_data?: Record<string, any>;
+  }): Promise<PlatformAccount> {
+    const result = await pool.query(
+      "INSERT INTO platform_accounts (user_id, platform, platform_user_id, access_token, refresh_token, expires_at, nickname, avatar_url, extra_data, status)" +
+      " VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)" +
+      " ON CONFLICT (user_id, platform, platform_user_id)" +
+      " DO UPDATE SET access_token = EXCLUDED.access_token," +
+      " refresh_token = EXCLUDED.refresh_token," +
+      " expires_at = EXCLUDED.expires_at," +
+      " nickname = EXCLUDED.nickname," +
+      " avatar_url = EXCLUDED.avatar_url," +
+      " extra_data = EXCLUDED.extra_data," +
+      " status = ," +
+      " updated_at = NOW()" +
+      " RETURNING *",
+      [userId, data.platform, data.platform_user_id, data.access_token,
+       data.refresh_token || null, data.expires_at || null, data.nickname || null,
+       data.avatar_url || null, JSON.stringify(data.extra_data || {}), "active"]
+    );
+    return result.rows[0];
+  }
+
+  async deleteAccount(accountId: number, userId: number): Promise<boolean> {
+    const result = await pool.query("DELETE FROM platform_accounts WHERE id = $1 AND user_id = $2", [accountId, userId]);
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  getAuthUrl(platform: Platform, state: string): string {
+    const platformConfig = config.platforms[platform];
+    if (!platformConfig || !platformConfig.clientId) throw new Error("Platform " + platform + " is not configured");
+    const redirectUri = encodeURIComponent(platformConfig.redirectUri);
+    const clientId = platformConfig.clientId;
+    const urls: Record<string, string> = {
+      douyin: "https://open.douyin.com/platform/oauth/connect?client_key=" + clientId + "&response_type=code&scope=user_info,video.create,video.data&redirect_uri=" + redirectUri + "&state=" + state,
+      bilibili: "https://passport.bilibili.com/register/authorize?client_id=" + clientId + "&response_type=code&redirect_uri=" + redirectUri + "&state=" + state,
+      youtube: "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + clientId + "&response_type=code&scope=https://www.googleapis.com/auth/youtube.upload%20https://www.googleapis.com/auth/youtube&redirect_uri=" + redirectUri + "&access_type=offline&state=" + state,
+      kuaishou: "https://open.kuaishou.com/oauth2/authorize?client_id=" + clientId + "&response_type=code&scope=user_info&redirect_uri=" + redirectUri + "&state=" + state,
+      weixin: "https://open.weixin.qq.com/connect/qrconnect?appid=" + clientId + "&response_type=code&scope=snsapi_login&redirect_uri=" + redirectUri + "&state=" + state,
+      tiktok: "https://www.tiktok.com/v2/auth/authorize/?client_key=" + clientId + "&response_type=code&scope=user.info.basic,video.upload,video.list&redirect_uri=" + redirectUri + "&state=" + state,
+    };
+    const url = urls[platform];
+    if (!url) throw new Error("Unsupported platform: " + platform);
+    return url;
+  }
+
+  isPlatformConfigured(platform: Platform): boolean {
+    const platformConfig = config.platforms[platform];
+    return !!(platformConfig && platformConfig.clientId && platformConfig.clientId !== "");
+  }
+
+  async bindBilibiliByCookie(userId: number, sessdata: string, bili_jct: string, dedeuserid?: string): Promise<PlatformAccount> {
+    const testResult = await bilibiliPublisher.validateAccount({ sessdata: sessdata, bili_jct: bili_jct, dedeuserid: dedeuserid || '' });
+    if (!testResult.valid) {
+      throw new Error(testResult.error || "\u65e0\u6548\u7684 Cookie");
+    }
+    const uid = testResult.uid || dedeuserid || 'unknown';
+    const result = await pool.query(
+      "INSERT INTO platform_accounts (user_id, platform, platform_user_id, access_token, nickname, extra_data, status)" +
+      " VALUES ($1, 'bilibili', $2, $3, $4, $5, 'active')" +
+      " RETURNING *",
+      [userId, uid, sessdata, testResult.nickname,
+       JSON.stringify({ sessdata: sessdata, bili_jct: bili_jct, dedeuserid: uid, bound_at: new Date().toISOString() })]
+    );
+    logger.info("Bilibili cookie bind: user " + userId + " -> " + testResult.nickname);
+    return result.rows[0];
+  }
+
+  async bindDouyinByCookie(userId: number, cookie: string, nickname?: string, uid?: string): Promise<PlatformAccount> {
+    let validatedNickname = nickname;
+    let validatedUid = uid;
+
+    try {
+      const testResult = await douyinPublisher.validateAccount({ sessionid: '', cookie: cookie });
+      if (testResult.valid) {
+        validatedNickname = validatedNickname || testResult.nickname;
+        validatedUid = validatedUid || testResult.uid;
+      }
+    } catch (error) {
+      logger.warn('Cookie validation failed, using provided values: ' + (error instanceof Error ? error.message : String(error)));
+    }
+
+    validatedUid = validatedUid || 'unknown';
+    validatedNickname = validatedNickname || '\u6296\u97f3\u7528\u6237';
+
+    await pool.query(
+      "DELETE FROM platform_accounts WHERE user_id = $1 AND platform = 'douyin'",
+      [userId]
+    );
+
+    const result = await pool.query(
+      "INSERT INTO platform_accounts (user_id, platform, platform_user_id, access_token, nickname, extra_data, status)" +
+      " VALUES ($1, 'douyin', $2, $3, $4, $5, 'active')" +
+      " RETURNING *",
+      [userId, validatedUid, cookie, validatedNickname,
+       JSON.stringify({ cookie: cookie, uid: validatedUid, bound_at: new Date().toISOString() })]
+    );
+    logger.info('Douyin cookie bind: user ' + userId + ' -> ' + validatedNickname);
+    return result.rows[0];
+  }
+
+
+  /**
+   * Full Douyin bind: cookie + localStorage tokens (privateKey, webProtect)
+   * This enables API-based publishing via bd-ticket signing.
+   */
+  async bindDouyinFull(userId: number, cookie: string, tokens?: { privateKey: string; webProtect: string }, nickname?: string, uid?: string, avatar?: string, storageStatePath?: string): Promise<PlatformAccount> {
+    let validatedNickname = nickname;
+    let validatedUid = uid;
+
+    try {
+      const testResult = await douyinPublisher.validateAccount({ sessionid: "", cookie: cookie });
+      if (testResult.valid) {
+        validatedNickname = validatedNickname || testResult.nickname;
+        validatedUid = validatedUid || testResult.uid;
+      }
+    } catch (error) {
+      logger.warn("Cookie validation failed: " + (error instanceof Error ? error.message : String(error)));
+    }
+
+    validatedUid = validatedUid || "unknown";
+    validatedNickname = validatedNickname || "抖音用户";
+
+    await pool.query(
+      "DELETE FROM platform_accounts WHERE user_id = $1 AND platform = 'douyin'",
+      [userId]
+    );
+
+    const extraData: Record<string, any> = {
+      cookie: cookie,
+      uid: validatedUid,
+      bound_at: new Date().toISOString(),
+    };
+
+    if (tokens && tokens.privateKey && tokens.webProtect) { extraData.tokens = tokens; } if (storageStatePath) { extraData.storageStatePath = storageStatePath; }
+
+    const result = await pool.query(
+      "INSERT INTO platform_accounts (user_id, platform, platform_user_id, access_token, nickname, avatar_url, extra_data, status)" +
+      " VALUES ($1, 'douyin', $2, $3, $4, $5, $6, 'active')" +
+      " RETURNING *",
+      [userId, validatedUid, cookie, validatedNickname, avatar || null, JSON.stringify(extraData)]
+    );
+    logger.info("Douyin full bind: user " + userId + " -> " + validatedNickname + (tokens ? " (with tokens)" : " (cookie only)"));
+    return result.rows[0];
+  }
+  async bindKuaishouByCookie(userId: number, cookie: string, did?: string): Promise<PlatformAccount> {
+    const testResult = await kuaishouPublisher.validateAccount({ cookie: cookie, did: did || '' });
+    if (!testResult.valid) {
+      throw new Error(testResult.error || "\u65e0\u6548\u7684 Cookie");
+    }
+    const didVal = testResult.uid || did || 'unknown';
+    const result = await pool.query(
+      "INSERT INTO platform_accounts (user_id, platform, platform_user_id, access_token, nickname, extra_data, status)" +
+      " VALUES ($1, 'kuaishou', $2, $3, $4, $5, 'active')" +
+      " RETURNING *",
+      [userId, didVal, cookie, testResult.nickname,
+       JSON.stringify({ cookie: cookie, did: didVal, bound_at: new Date().toISOString() })]
+    );
+    logger.info("Kuaishou cookie bind: user " + userId + " -> " + testResult.nickname);
+    return result.rows[0];
+  }
+
+  async getAccountCookies(accountId: number, userId: number): Promise<BilibiliAccountData | null> {
+    const account = await this.getAccountById(accountId, userId);
+    if (!account || account.platform !== "bilibili") return null;
+    const extra = typeof account.extra_data === "string" ? JSON.parse(account.extra_data) : account.extra_data;
+    if (!extra || !extra.sessdata) return null;
+    return { sessdata: extra.sessdata, bili_jct: extra.bili_jct, dedeuserid: extra.dedeuserid || account.platform_user_id };
+  }
+
+  async handleCallback(platform: Platform, code: string, userId: number): Promise<PlatformAccount> {
+    logger.info("Handling OAuth callback for " + platform + ", user " + userId);
+    if (platform === 'douyin' && douyinApiService.isConfigured) {
+      try {
+        const { douyinService } = await import('./platforms/douyin.service');
+        return await douyinService.handleAuthCallback(code, userId);
+      } catch (error: any) {
+        logger.error('Douyin OAuth callback failed, falling back to placeholder: ' + error.message);
+      }
+    }
+    const account = await this.upsertAccount(userId, {
+      platform: platform,
+      platform_user_id: "pending_integration",
+      access_token: "exchange_via_code_" + code,
+      nickname: platform + " Account",
+    });
+    return account;
+  }
+
+  async ensureDouyinAccessToken(accountId: number): Promise<string> {
+    const result = await pool.query("SELECT * FROM platform_accounts WHERE id = $1 AND platform = 'douyin'", [accountId]);
+    const account = result.rows[0];
+    if (!account) throw new Error('\u6296\u97f3\u8d26\u53f7\u4e0d\u5b58\u5728');
+    const extra = typeof account.extra_data === 'string' ? JSON.parse(account.extra_data) : account.extra_data;
+    if (extra && extra.cookie) {
+      return extra.cookie;
+    }
+    const now = new Date();
+    const expiresAt = account.expires_at ? new Date(account.expires_at) : null;
+    if (expiresAt && expiresAt > now) {
+      return account.access_token;
+    }
+    if (!account.refresh_token) {
+      await pool.query("UPDATE platform_accounts SET status = 'expired' WHERE id = $1", [accountId]);
+      throw new Error('\u6296\u97f3\u6388\u6743\u5df2\u8fc7\u671f\uff0c\u8bf7\u91cd\u65b0\u6388\u6743');
+    }
+    return await this.refreshDouyinToken(accountId);
+  }
+
+  async refreshDouyinToken(accountId: number): Promise<string> {
+    const result = await pool.query("SELECT * FROM platform_accounts WHERE id = $1 AND platform = 'douyin'", [accountId]);
+    const account = result.rows[0];
+    if (!account || !account.refresh_token) {
+      throw new Error('\u65e0\u6cd5\u5237\u65b0\uff1a\u7f3a\u5c11 refresh_token');
+    }
+    try {
+      const refreshed = await douyinApiService.refreshAccessToken(account.refresh_token);
+      const newExpiresAt = new Date(Date.now() + refreshed.expires_in * 1000);
+      const extra = typeof account.extra_data === 'string' ? JSON.parse(account.extra_data) : account.extra_data;
+      extra.refresh_expires_at = new Date(Date.now() + (refreshed.refresh_expires_in || 2592000) * 1000).toISOString();
+      await pool.query(
+        "UPDATE platform_accounts SET access_token = $1, refresh_token = $2, expires_at = $3, extra_data = $4, status = 'active', updated_at = NOW() WHERE id = $5",
+        [refreshed.access_token, refreshed.refresh_token, newExpiresAt, JSON.stringify(extra), accountId]
+      );
+      logger.info('[PlatformService] Douyin token refreshed for account ' + accountId);
+      return refreshed.access_token;
+    } catch (error: any) {
+      logger.error('[PlatformService] Douyin token refresh failed for account ' + accountId + ':', error.message);
+      await pool.query("UPDATE platform_accounts SET status = 'expired' WHERE id = $1", [accountId]);
+      throw new Error('\u6296\u97f3\u6388\u6743\u5237\u65b0\u5931\u8d25\uff0c\u8bf7\u91cd\u65b0\u6388\u6743');
+    }
+  }
+
+  async refreshExpiringTokens(): Promise<number> {
+    const result = await pool.query(
+      "SELECT id FROM platform_accounts" +
+      " WHERE platform = 'douyin' AND status = 'active'" +
+      " AND refresh_token IS NOT NULL AND refresh_token != ''" +
+      " AND expires_at IS NOT NULL AND expires_at < NOW() + INTERVAL '1 hour'"
+    );
+    let refreshedCount = 0;
+    for (const row of result.rows) {
+      try {
+        await this.refreshDouyinToken(row.id);
+        refreshedCount++;
+      } catch (e) {
+        // skip failed refreshes
+      }
+    }
+    if (refreshedCount > 0) {
+      logger.info('[PlatformService] Refreshed ' + refreshedCount + ' expiring Douyin tokens');
+    }
+    return refreshedCount;
+  }
+}
+
+export const platformService = new PlatformService();
+

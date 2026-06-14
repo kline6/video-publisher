@@ -1,0 +1,429 @@
+// @ts-nocheck
+/**
+ * Enhanced Playwright-based Douyin publisher with anti-detection.
+ */
+import { logger } from '../../utils/logger';
+import * as fs from 'fs';
+import * as path from 'path';
+
+const DEFAULT_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36';
+
+export interface PlaywrightPublishResult {
+  success: boolean;
+  itemId?: string;
+  shareLink?: string;
+  error?: string;
+}
+
+function parseCookieString(cookie: string): Array<{ name: string; value: string; domain: string; path: string }> {
+  return cookie.split(';').map(pair => {
+    const trimmed = pair.trim();
+    const eqIdx = trimmed.indexOf('=');
+    if (eqIdx === -1) return null;
+    return {
+      name: trimmed.substring(0, eqIdx).trim(),
+      value: trimmed.substring(eqIdx + 1).trim(),
+      domain: '.douyin.com',
+      path: '/',
+    };
+  }).filter(Boolean) as any[];
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function randomDelay(min = 500, max = 1500): Promise<void> {
+  return sleep(min + Math.random() * (max - min));
+}
+
+const STEALTH_SCRIPT = `
+  Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+  Object.defineProperty(navigator, 'plugins', {
+    get: () => {
+      const p = [
+        { name: 'Chrome PDF Plugin', filename: 'internal-pdf-viewer', description: 'PDF' },
+        { name: 'Chrome PDF Viewer', filename: 'mhjfbmdgcfjbbpaeojofohoefgiehjai', description: '' },
+        { name: 'Native Client', filename: 'internal-nacl-plugin', description: '' },
+      ];
+      p.length = 3;
+      return p;
+    }
+  });
+  Object.defineProperty(navigator, 'languages', { get: () => ['zh-CN', 'zh', 'en-US', 'en'] });
+  if (!window.chrome) window.chrome = {};
+  if (!window.chrome.runtime) window.chrome.runtime = {};
+  const getParameter = WebGLRenderingContext.prototype.getParameter;
+  WebGLRenderingContext.prototype.getParameter = function(parameter) {
+    if (parameter === 37445) return 'Intel Inc.';
+    if (parameter === 37446) return 'Intel Iris OpenGL Engine';
+    return getParameter.call(this, parameter);
+  };
+  Object.defineProperty(screen, 'width', { get: () => 1920 });
+  Object.defineProperty(screen, 'height', { get: () => 1080 });
+  Object.defineProperty(screen, 'availWidth', { get: () => 1920 });
+  Object.defineProperty(screen, 'availHeight', { get: () => 1040 });
+`;
+
+export async function publishViaPlaywright(params: {
+  videoPath: string;
+  title: string;
+  description: string;
+  tags?: string[];
+  storageStatePath?: string;
+  cookie: string;
+}): Promise<PlaywrightPublishResult> {
+  let browser = null;
+  const debugDir = path.join(process.cwd(), 'storage_states');
+  if (!fs.existsSync(debugDir)) fs.mkdirSync(debugDir, { recursive: true });
+
+  try {
+    const { chromium } = require('playwright');
+
+    browser = await chromium.launch({
+      channel: 'chrome',
+      headless: false,
+      args: [
+        '--disable-blink-features=AutomationControlled',
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-infobars',
+        '--window-size=1920,1080',
+        '--start-maximized',
+        '--disable-dev-shm-usage',
+        '--lang=zh-CN',
+      ],
+    });
+
+    let context;
+    const storagePath = params.storageStatePath;
+    if (storagePath && fs.existsSync(storagePath)) {
+      logger.info('[DouyinPlaywright] Loading storageState: ' + storagePath);
+      try {
+        context = await browser.newContext({
+          storageState: storagePath,
+          userAgent: DEFAULT_UA,
+          viewport: { width: 1920, height: 1080 },
+          locale: 'zh-CN',
+          timezoneId: 'Asia/Shanghai',
+        });
+      } catch (e: any) {
+        logger.warn('[DouyinPlaywright] storageState failed, using cookies: ' + e.message);
+        context = await browser.newContext({ userAgent: DEFAULT_UA, viewport: { width: 1920, height: 1080 }, locale: 'zh-CN', timezoneId: 'Asia/Shanghai' });
+        await context.addCookies(parseCookieString(params.cookie));
+      }
+    } else {
+      logger.info('[DouyinPlaywright] No storageState, using cookies');
+      context = await browser.newContext({ userAgent: DEFAULT_UA, viewport: { width: 1920, height: 1080 }, locale: 'zh-CN', timezoneId: 'Asia/Shanghai' });
+      await context.addCookies(parseCookieString(params.cookie));
+    }
+
+    await context.addInitScript(STEALTH_SCRIPT);
+    const page = await context.newPage();
+
+    // Step 1: Warm up session
+    logger.info('[DouyinPlaywright] Step 1: Warming up...');
+    await page.goto('https://creator.douyin.com/creator-micro/home', { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
+    await randomDelay(2000, 4000);
+
+    let currentUrl = page.url();
+    if (currentUrl.includes('passport') || currentUrl.includes('login')) {
+      return { success: false, error: 'Cookie已失效，请重新扫码登录' };
+    }
+
+    // Step 2: Go to upload page
+    logger.info('[DouyinPlaywright] Step 2: Going to upload page...');
+    await page.goto('https://creator.douyin.com/creator-micro/content/upload', { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
+    await randomDelay(3000, 5000);
+
+    // Step 3: Handle security popup
+    await handleSecurityPopup(page, debugDir);
+
+    // Step 4: Find upload input
+    logger.info('[DouyinPlaywright] Step 3: Looking for upload input...');
+    let uploadInput = null;
+    const selectors = ['input[type="file"]', 'input[accept*="video"]', 'input[accept*="mp4"]', 'input[accept*=".mp4"]'];
+    for (const sel of selectors) {
+      try {
+        uploadInput = await page.waitForSelector(sel, { timeout: 5000 });
+        if (uploadInput) { logger.info('[DouyinPlaywright] Found: ' + sel); break; }
+      } catch {}
+    }
+
+    if (!uploadInput) {
+      const btns = ['text=上传视频', 'text=点击上传', '.upload-btn', 'button:has-text("上传")'];
+      for (const btnSel of btns) {
+        try {
+          const btn = await page.$(btnSel);
+          if (btn) { await btn.click(); await randomDelay(1000, 2000); break; }
+        } catch {}
+      }
+      for (const sel of selectors) {
+        try { uploadInput = await page.waitForSelector(sel, { timeout: 3000 }); if (uploadInput) break; } catch {}
+      }
+    }
+
+    if (!uploadInput) {
+      const ss = path.join(debugDir, 'debug_no_upload_' + Date.now() + '.png');
+      await page.screenshot({ path: ss, fullPage: true });
+      return { success: false, error: '找不到视频上传入口。截图: ' + ss };
+    }
+
+    // Step 5: Upload video
+    logger.info('[DouyinPlaywright] Step 4: Uploading video...');
+    await uploadInput.setInputFiles(params.videoPath);
+    await randomDelay(3000, 5000);
+    await handleSecurityPopup(page, debugDir);
+
+    // Wait for upload
+    let uploadComplete = false;
+    for (let i = 0; i < 40; i++) {
+      await sleep(3000);
+      try {
+        const content = await page.evaluate(() => document.body?.innerText || '');
+        if (content.includes('上传成功') || content.includes('上传完成') || content.includes('已上传') || content.includes('编辑作品')) {
+          uploadComplete = true;
+          break;
+        }
+        const btn = await page.$('button:has-text("发布"):not([disabled])');
+        if (btn) { uploadComplete = true; break; }
+        if (i % 5 === 0) logger.info('[DouyinPlaywright] Upload check ' + (i + 1) + '/40');
+      } catch {}
+    }
+
+    if (!uploadComplete) {
+      const ss = path.join(debugDir, 'debug_upload_timeout_' + Date.now() + '.png');
+      await page.screenshot({ path: ss, fullPage: true });
+      return { success: false, error: '视频上传超时。截图: ' + ss };
+    }
+
+    // Step 6: Fill title
+    logger.info('[DouyinPlaywright] Step 5: Filling title...');
+    await randomDelay(1000, 2000);
+    const titleSelectors = ['input[placeholder*="标题"]', 'input[placeholder*="作品标题"]', '.title-input input', '.editor-title input', 'input[maxlength]'];
+    for (const sel of titleSelectors) {
+      try {
+        const titleInput = await page.$(sel);
+        if (titleInput) {
+          await titleInput.click();
+          await titleInput.fill('');
+          await titleInput.fill(params.title.substring(0, 30));
+          logger.info('[DouyinPlaywright] Title set');
+          break;
+        }
+      } catch {}
+    }
+    await randomDelay(500, 1000);
+
+    // Step 7: Fill description (without tags to avoid dropdown)
+    logger.info('[DouyinPlaywright] Step 6: Filling description...');
+    const descSelectors = ['.ql-editor', '[contenteditable="true"]', 'textarea[placeholder*="描述"]', '.ProseMirror'];
+    for (const sel of descSelectors) {
+      try {
+        const descEl = await page.$(sel);
+        if (descEl) {
+          await descEl.click();
+          await page.keyboard.type((params.description || '').substring(0, 200), { delay: 50 });
+          logger.info('[DouyinPlaywright] Description set');
+          break;
+        }
+      } catch {}
+    }
+    await randomDelay(500, 1000);
+
+    
+    // Step 6.5: Fill tags (hashtags) in the topic/hashtag input
+    if (params.tags && params.tags.length > 0) {
+      logger.info('[DouyinPlaywright] Step 6.5: Filling tags: ' + params.tags.join(', '));
+      let tagInput = null;
+      for (const tagSel of ['input[placeholder*="话题"]', 'input[placeholder*="标签"]', 'input[placeholder*="添加话题"]', 'input[placeholder*="添加标签"]']) {
+        try {
+          tagInput = await page.$(tagSel);
+          if (tagInput) { logger.info('[DouyinPlaywright] Found tag input: ' + tagSel); break; }
+        } catch {}
+      }
+
+      if (tagInput) {
+        for (const tag of params.tags.slice(0, 5)) {
+          try {
+            await tagInput.click();
+            await randomDelay(300, 500);
+            await tagInput.fill('');
+            await randomDelay(200, 300);
+            await tagInput.type('#' + tag, { delay: 50 });
+            await randomDelay(1000, 1500);
+            try {
+              const suggestion = await page.$('.semi-list-option, [class*="suggestion"] li:first-child, [class*="topic-item"]:first-child, [class*="dropdown"] [class*="item"]:first-child');
+              if (suggestion) {
+                await suggestion.click();
+                logger.info('[DouyinPlaywright] Tag from dropdown: #' + tag);
+              } else {
+                await page.keyboard.press('Enter');
+                logger.info('[DouyinPlaywright] Tag Enter: #' + tag);
+              }
+            } catch {
+              await page.keyboard.press('Enter');
+            }
+            await randomDelay(500, 800);
+          } catch (e) {
+            logger.warn('[DouyinPlaywright] Tag error: ' + e.message);
+          }
+        }
+      } else {
+        logger.info('[DouyinPlaywright] No tag input found, appending to description');
+        try {
+          const editor = await page.$('.ql-editor, [contenteditable="true"], .ProseMirror');
+          if (editor) {
+            await editor.click();
+            await page.keyboard.press('End');
+            await randomDelay(300, 500);
+            await page.keyboard.type(' ' + params.tags.slice(0, 5).map(function(t) { return '#' + t; }).join(' '), { delay: 50 });
+            logger.info('[DouyinPlaywright] Tags appended');
+          }
+        } catch {}
+      }
+    }
+
+    // Step 8: Click empty area to dismiss any dropdown, then scroll down
+    logger.info('[DouyinPlaywright] Step 7: Clicking empty area and scrolling...');
+    
+    // Click empty area to dismiss tag dropdown / any open dropdowns
+    try {
+      await page.mouse.click(960, 50); // Click near top of page (header area)
+      await randomDelay(500, 800);
+    } catch {}
+    
+    // Press Escape to close any open dropdowns
+    try {
+      await page.keyboard.press('Escape');
+      await randomDelay(500, 800);
+    } catch {}
+
+    // Scroll down to make the publish button visible
+    logger.info('[DouyinPlaywright] Scrolling down to find publish button...');
+    for (let scroll = 0; scroll < 8; scroll++) {
+      await page.evaluate(() => window.scrollBy(0, 400));
+      await randomDelay(400, 700);
+    }
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await randomDelay(1500, 2500);
+
+        // Step 9: Find and click publish button via coordinates (more reliable)
+    logger.info('[DouyinPlaywright] Step 9: Clicking publish button...');
+    try {
+      const btnPos = await page.evaluate(function() {
+        var buttons = Array.from(document.querySelectorAll('button'));
+        var target = null;
+        // Prefer "发布视频" exact match
+        target = buttons.find(function(b) {
+          var t = b.textContent ? b.textContent.trim() : '';
+          return t === '发布视频' && !b.disabled && b.offsetParent !== null;
+        });
+        // Then "发布视频" contains
+        if (!target) {
+          target = buttons.find(function(b) {
+            var t = b.textContent ? b.textContent.trim() : '';
+            return t.indexOf('发布视频') >= 0 && !b.disabled && b.offsetParent !== null;
+          });
+        }
+        // Then any "发布" at bottom
+        if (!target) {
+          var sorted = buttons
+            .filter(function(b) { return b.textContent && b.textContent.indexOf('发布') >= 0 && !b.disabled && b.offsetParent !== null; })
+            .sort(function(a, b) { return b.getBoundingClientRect().top - a.getBoundingClientRect().top; });
+          target = sorted[0];
+        }
+        if (target) {
+          target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          return {
+            x: target.getBoundingClientRect().left + target.getBoundingClientRect().width / 2,
+            y: target.getBoundingClientRect().top + target.getBoundingClientRect().height / 2,
+            text: (target.textContent || '').trim().substring(0, 30)
+          };
+        }
+        return null;
+      });
+      if (btnPos) {
+        await randomDelay(1000, 2000);
+        await page.mouse.click(btnPos.x, btnPos.y);
+        logger.info('[DouyinPlaywright] Clicked at: x=' + btnPos.x + ' y=' + btnPos.y + ' text=' + btnPos.text);
+      } else {
+        logger.warn('[DouyinPlaywright] Publish button not found for click');
+        const ss = path.join(debugDir, 'debug_no_publish_btn_' + Date.now() + '.png');
+        await page.screenshot({ path: ss, fullPage: true });
+      }
+    } catch (e) {
+      logger.error('[DouyinPlaywright] Click error: ' + e.message);
+    }
+    
+    // Step 10: Check result
+    logger.info('[DouyinPlaywright] Step 9: Checking result...');
+    let publishSuccess = false;
+    let finalUrl = page.url();
+    const successIndicators = ['发布成功', '作品发布成功', '已发布'];
+
+    for (let i = 0; i < 15; i++) {
+      await sleep(2000);
+      try {
+        const content = await page.evaluate(() => document.body?.innerText || '');
+        finalUrl = page.url();
+        if (successIndicators.some(ind => content.includes(ind)) || finalUrl.includes('content/manage') || finalUrl.includes('content/list')) {
+          publishSuccess = true;
+          break;
+        }
+        if (['发布失败', '上传失败', '请重试'].some(ind => content.includes(ind))) {
+          const ss = path.join(debugDir, 'debug_publish_error_' + Date.now() + '.png');
+          await page.screenshot({ path: ss, fullPage: true });
+          return { success: false, error: '发布失败。截图: ' + ss };
+        }
+      } catch {}
+    }
+
+    // Save updated storageState
+    try {
+      const state = await context.storageState();
+      fs.writeFileSync(path.join(debugDir, 'douyin_latest.json'), state);
+    } catch {}
+
+    if (publishSuccess) {
+      logger.info('[DouyinPlaywright] SUCCESS! URL: ' + finalUrl);
+      return { success: true, shareLink: finalUrl };
+    }
+
+    const ss = path.join(debugDir, 'debug_result_' + Date.now() + '.png');
+    await page.screenshot({ path: ss, fullPage: true });
+    return { success: false, error: '发布结果不确定。截图: ' + ss };
+
+  } catch (e: any) {
+    logger.error('[DouyinPlaywright] Error:', e);
+    return { success: false, error: '发布异常: ' + e.message };
+  } finally {
+    if (browser) try { await browser.close(); } catch {}
+  }
+}
+
+async function handleSecurityPopup(page: any, debugDir: string): Promise<'handled' | 'blocked' | 'none'> {
+  try {
+    await sleep(1500);
+    const content = await page.evaluate(() => document.body?.innerText || '');
+    if (content.includes('账号被永久封禁') || content.includes('立即停止相关行为')) {
+      const ss = path.join(debugDir, 'debug_security_block_' + Date.now() + '.png');
+      await page.screenshot({ path: ss, fullPage: true });
+      return 'blocked';
+    }
+    const hasPopup = await page.evaluate(() => {
+      return document.querySelectorAll('.semi-modal, .semi-portal, [class*="modal"], [class*="dialog"]').length > 0;
+    });
+    if (hasPopup) {
+      for (const sel of ['.semi-modal-close', 'button:has-text("我知道了")', 'button:has-text("关闭")', 'button:has-text("确定")', 'button:has-text("知道了")']) {
+        try {
+          const btn = await page.$(sel);
+          if (btn) { await btn.click(); await sleep(1000); return 'handled'; }
+        } catch {}
+      }
+      try { await page.mouse.click(10, 10); await sleep(500); } catch {}
+      return 'handled';
+    }
+    return 'none';
+  } catch { return 'none'; }
+}

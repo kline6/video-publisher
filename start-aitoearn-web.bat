@@ -1,0 +1,5 @@
+@echo off
+cd /d "E:\gongzhonghaoxiangmu\AiToEarn-ref\project\aitoearn-web"
+set NEXT_PUBLIC_API_URL=http://localhost:3002/api
+set AUTO_LOGIN_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMjhkM2VjMjI4MDQ2YzkwZWQ4YzE3OSIsIm1haWwiOiJhZG1pbkBWaWRlb0Zsb3cubG9jYWwiLCJuYW1lIjoiQWRtaW4iLCJpYXQiOjE3ODEwNjA1ODgsImV4cCI6NDkzNjgyMDU4OH0.wFYN1Yj-PapoIR51eOvU6aTBtReX8aEflgkkYzA5V28
+npx next dev -p 6061

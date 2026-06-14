@@ -1,0 +1,470 @@
+{
+  "dropToUpload": "업로드하려면 놓으세요",
+  "announcement": {
+    "text": "VideoFlow은 에이전트�?사용하여 모든 콘텐�?요구사항�?충족합니�? 실행 �?여러 도구�?호출하므�?시간�?걸릴 �?있습니다. 언제든지 종료하고 나중�?작업 진행 상황�?확인�?�?있습니다."
+  },
+  "releaseBanner": {
+    "tag": "릴리�?v0.8.0",
+    "text": "플러그인�?활발�?마켓플레이스�?AI 워크플로우를 구축하고 확장하세�?"
+  },
+  "header": {
+    "logo": "VideoFlow",
+    "nav": {
+      "home": "�?,
+      "marketplace": "마켓플레이스",
+      "pricing": "가�?,
+      "status": "상태",
+      "docs": "문서",
+      "blog": "블로�?,
+      "download": "다운로드",
+      "brand": "브랜�?,
+      "resources": "리소�?
+    },
+    "getStarted": "시작하기"
+  },
+  "hero": {
+    "stars": "1.0k",
+    "starsText": "스타",
+    "github": "GitHub",
+    "title": "최고�?콘텐�?마케팅\nAI 에이전트",
+    "subtitle": "오늘부�?AI�?소셜 미디어를 쉽게 관리하세요. VideoFlow은 창작 영감, 콘텐�?제작, 콘텐�?배포부�?콘텐�?상호작용 관리까지 원스�?기능�?제공하여 AI�?손쉽�?활용�?�?있게 합니�?",
+    "getStarted": "시작하기",
+    "useMobilePhone": "모바일에�?사용"
+  },
+  "seo": {
+    "title": "AI 영상 �?콘텐�?제작 - 15�?이상 소셜 플랫폼에 게시",
+    "description": "VideoFlow은 AI 기반 소셜 미디�?성장 운영자입니다. AI�?동영�? 이미지, 카피�?생성하고 TikTok, YouTube, Instagram, Facebook, X �?15�?이상�?플랫폼에 원클�?배포하세�? AI 콘텐�?제작, 스마�?편집, 스타�?변�? 영상 번역, 트렌�?발견, 브랜�?모니터링, 통합 인게이지먼트 대시보드를 제공합니�?",
+    "keywords": "AI 콘텐�?마케�? AI 소셜 미디�?관�? AI 영상 생성, 다중 플랫�?게시, AI 콘텐�?제작, 소셜 미디�?자동�? TikTok 마케�? YouTube 마케�? AI 에이전트, 콘텐�?배포, AI 카피라이�? 영상 편집 AI, 브랜�?모니터링, VideoFlow"
+  },
+  "agentGenerator": {
+    "title": "무엇�?도와드릴까요?",
+    "subtitle": "당신�?AI 성장 운영�?
+  },
+  "aiGeneration": {
+    "inputPlaceholder": "콘텐�?아이디어�?입력하면 AI가 완성�?작품�?만들�?드립니다...",
+    "generateButton": "만들�?시작",
+    "generating": "만드�?�?..",
+    "emptyPromptAlert": "콘텐�?생성�?위한 프롬프트�?입력�?주세�?,
+    "createTaskFailed": "작업 생성 실패",
+    "uploadSuccess": "이미지 업로�?성공",
+    "uploadFailed": "이미지 업로�?실패, 다시 시도�?주세�?,
+    "taskCreatedSuccess": "작업�?성공적으�?생성되었습니�?,
+    "thinking": "AI 생각 �?..",
+    "topicPrefix": "창작 주제: ",
+    "generatedTitlePrefix": "생성�?제목: ",
+    "descriptionPrefix": "📄 ",
+    "failedReasonPrefix": "실패 원인: ",
+    "taskTimeout": "작업 시간 초과, 나중�?다시 시도�?주세�?,
+    "unknownError": "�?�?없는 오류",
+    "status": {
+      "thinking": "AI 생각 �?..",
+      "waiting": "대�?�?..",
+      "generatingContent": "콘텐�?생성 �?,
+      "generatingImage": "이미지 생성 �?,
+      "generatingVideo": "동영�?생성 �?,
+      "generatingText": "텍스�?생성 �?,
+      "completed": "완료!",
+      "failed": "실패",
+      "cancelled": "취소�?
+    },
+    "channelAuthRequired": "먼저 채널�?추가하고 인증�?주세�?,
+    "channelAuthExpired": "채널 인증�?만료되었습니�? 재인증해 주세�?,
+    "channelNotSupported": "�?플랫폼은 직접 게시�?지원하지 않습니다",
+    "taskStopped": "생성�?중지되었습니�?,
+    "stopTaskFailed": "작업 중지 실패",
+    "newConversation": "�?대화가 시작되었습니�?,
+    "generatingWarning": "생성 진행 중입니다. 먼저 현재 작업�?중지�?주세�?,
+    "conversationId": "대�?ID",
+    "startNewConversation": "�?대�?시작",
+    "currentCost": "현재 비용",
+    "aiGenerationProcess": "AI 생성 프로세스",
+    "waitingAiResponse": "AI 응답 대�?�?..",
+    "uploadImage": "이미지 업로�?,
+    "removeImage": "이미지 제거",
+    "agentMode": "에이전트 모드",
+    "imageGeneration": "이미지 생성",
+    "videoGeneration": "동영�?생성",
+    "draftBox": "초안�?,
+    "batchPublish": "일괄 게시",
+    "stopGeneration": "생성 중지",
+    "sendMessage": "메시지 전송",
+    "inspirationPrompt": "영감�?떠오르셨나요? �?문장으로 창작�?시작하세�?,
+    "onboardingTitle": "창작�?어떻�?시작해야 할지 모르시겠나요?",
+    "onboardingDescription": "�?문장으로 창작�?시작하세�?,
+    "gotIt": "알겠습니�?,
+    "saveDraftFailed": "초안 저�?실패",
+    "saveDraftSuccess": "초안�?성공적으�?저장되었습니다",
+    "noDraftGroupFound": "사용 가능한 초안 그룹�?없습니다. 먼저 그룹�?만들�?주세�?,
+    "noDraftGroup": "사용 가능한 초안 그룹�?없습니다",
+    "needAddChannel": "채널 추가 필요",
+    "channelNotAdded": "{platform} 채널�?아직 추가하지 않은 것으�?확인됩니�? 추가하시겠습니까?",
+    "goAdd": "추가하기",
+    "cancel": "취소",
+    "channelAuthExpiredTitle": "채널 인증 만료",
+    "channelAuthExpiredContent": "채널 인증�?만료되었습니�? 재인증하시겠습니�?",
+    "reauthorize": "재인�?,
+    "needLoginChannel": "채널 로그�?필요",
+    "needLogin": "로그�?필요",
+    "pleaseLoginChannel": "먼저 �?채널 계정�?로그인해 주세�?,
+    "goLogin": "로그�?,
+    "needBindChannel": "채널 연결",
+    "needBindChannelTitle": "채널 연결",
+    "needBindChannelContent": "{{platform}} 계정�?찾을 �?없습니다. 게시하려�?{{platform}} 계정�?추가�?주세�?",
+    "goBind": "채널 추가",
+    "platformRequiresPlugin": "�?플랫폼은 플러그인 게시가 필요합니�? 먼저 플러그인�?인증�?주세�?,
+    "needAuthorizePlugin": "플러그인 인증 필요",
+    "pluginAuthorizeDescription": "�?플랫폼은 플러그인 게시가 필요합니�? 여기�?클릭하여 플러그인�?인증�?주세�?,
+    "noAccountFound": "�?플랫폼에 대�?계정�?찾을 �?없습니다. 먼저 계정�?추가�?주세�?,
+    "publishTaskSubmitted": "게시 작업�?플러그인�?제출되었습니�?,
+    "publishingViaPlugin": "플러그인�?통해 게시 �?..",
+    "pluginPublishFailed": "플러그인 게시 실패"
+  },
+  "plugin": {
+    "platformNeedsPlugin": "�?플랫폼은 플러그인 게시가 필요합니�? 먼저 플러그인�?인증�?주세�?,
+    "authorizePluginTitle": "플러그인 인증 필요",
+    "authorizePluginDescription": "�?플랫폼은 플러그인 게시가 필요합니�? 여기�?클릭하여 플러그인�?인증�?주세�?,
+    "noAccountFound": "�?플랫폼에 대�?계정�?찾을 �?없습니다. 먼저 계정�?추가�?주세�?,
+    "publishTaskSubmitted": "게시 작업�?플러그인�?제출되었습니�?,
+    "publishingViaPlugin": "플러그인�?통해 게시 �?..",
+    "publishFailed": "플러그인 게시 실패"
+  },
+  "status": {
+    "generatingInProcess": "생성 진행 중입니다. 먼저 현재 작업�?중지�?주세�?,
+    "stopGenerating": "생성 중지",
+    "sendMessage": "메시지 전송"
+  },
+  "messages": {
+    "generatingInProcessStopFirst": "생성 진행 중입니다. 먼저 현재 작업�?중지�?주세�?,
+    "newConversationStarted": "�?대화가 시작되었습니�?,
+    "draftSavedSuccessfully": "초안�?성공적으�?저장되었습니다",
+    "saveDraftFailed": "초안 저�?실패",
+    "noDraftGroupFound": "사용 가능한 초안 그룹�?없습니다. 먼저 그룹�?만들�?주세�?,
+    "createDraftGroupFirst": "사용 가능한 초안 그룹�?없습니다"
+  },
+  "platformNames": {
+    "douyin": "더우�?,
+    "xhs": "샤오홍슈",
+    "wxSph": "위챗 채널",
+    "KWAI": "쾌수",
+    "youtube": "YouTube",
+    "wxGzh": "위챗 공식 계정",
+    "bilibili": "비리비리",
+    "twitter": "Twitter",
+    "tiktok": "TikTok",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "threads": "Threads",
+    "pinterest": "Pinterest",
+    "linkedin": "LinkedIn"
+  },
+  "channel": {
+    "addChannelRequiredTitle": "채널 추가 필요",
+    "addChannelRequiredContent": "{platform} 채널�?아직 추가하지 않은 것으�?확인됩니�? 추가하시겠습니까?",
+    "goToAdd": "추가하기",
+    "authExpiredTitle": "채널 인증 만료",
+    "authExpiredContent": "채널 인증�?만료되었습니�? 재인증하시겠습니�?",
+    "reauthorize": "재인�?,
+    "loginRequiredTitle": "채널 로그�?필요",
+    "loginRequiredContent": "먼저 �?채널 계정�?로그인해 주세�?,
+    "goToLogin": "로그�?
+  },
+  "guide": {
+    "aiInputTitle": "창작�?어떻�?시작해야 할지 모르시겠나요?",
+    "aiInputDescription": "�?문장으로 창작�?시작하세�?
+  },
+  "download": {
+    "downloadNow": "지�?다운로드"
+  },
+  "wechat": {
+    "officialAccount": "위챗 공식 계정",
+    "communityOfficialAccount": "커뮤니티 공식 계정"
+  },
+  "brandBar": {
+    "title": "지원되�?소셜 미디�?플랫�?
+  },
+  "buildSection": {
+    "badge": "기능 1",
+    "title": "콘텐�?게시",
+    "titleBlue": " �?원클�?다중 플랫�?,
+    "features": {
+      "hotTopic": {
+        "title": "어디서나 배포",
+        "description": "가�?광범위한 글로벌 플랫폼에 게시 (더우�? 쾌수, 위챗, 비리비리, 샤오홍슈, Facebook, Instagram, TikTok, LinkedIn, Threads, YouTube, Pinterest, X)."
+      },
+      "international": {
+        "title": "캘린�?스케줄러",
+        "description": "모든 플랫폼에�?캘린더처�?콘텐츠를 계획하고 조정하세�? 통합 대시보�? �?곳에�?모든 상호작용�?관리합니다."
+      }
+    },
+    "carouselHint": "스크�?휠로 이미지 전환"
+  },
+  "hotspotSection": {
+    "badge": "기능 2",
+    "title": "콘텐�?핫스�?�?바이�?영감 엔진",
+    "titleBlue": "사례 라이브러�?& 트렌�?레이�?,
+    "features": {
+      "hotTopic": {
+        "title": "사례 라이브러�?,
+        "description": "10,000�?이상�?좋아요를 받는 게시물이 어떻�?만들어지는지 탐색하세�?"
+      },
+      "international": {
+        "title": "트렌�?레이�?,
+        "description": "최신 바이�?트렌드를 즉시 발견하고 크리에이�?불안�?줄이세요."
+      }
+    },
+    "carouselHint": "스크�?휠로 이미지 전환"
+  },
+  "searchSection": {
+    "badge": "기능 3",
+    "title": "콘텐�?검�?�?브랜�?& 마켓 인사이트",
+    "titleBlue": "브랜�?모니터링 & 콘텐�?디스커버�?,
+    "features": {
+      "hotTopic": {
+        "title": "브랜�?모니터링",
+        "description": "브랜드에 대�?대화를 실시간으�?추적하세�?"
+      },
+      "international": {
+        "title": "콘텐�?디스커버�?,
+        "description": "타�?참여�?위한 게시�? 주제 �?커뮤니티�?검색하세요."
+      }
+    },
+    "carouselHint": "스크�?휠로 이미지 전환"
+  },
+  "commentsSection": {
+    "badge": "기능 4",
+    "title": "댓글 검�?�?정밀 사용�?마이�?,
+    "titleBlue": "스마�?댓글 검�?& 전환 부스터",
+    "features": {
+      "hotTopic": {
+        "title": "스마�?댓글 검�?,
+        "description": "\"링크 주세요\" 또는 \"어떻�?사나요\"와 같은 높은 전환 신호�?감지합니�?"
+      },
+      "international": {
+        "title": "전환 부스터",
+        "description": "즉시 답변하고 �?높은 참여도와 판매�?유도하세�?"
+      }
+    },
+    "carouselHint": "스크�?휠로 이미지 전환"
+  },
+  "connectSection": {
+    "badge": "기능 5",
+    "title": "콘텐�?인게이지먼트 �?성장 엔진",
+    "titleBlue": "통합 대시보�?& 적극적인 참여",
+    "features": {
+      "creation": {
+        "title": "통합 대시보�?,
+        "description": "�?곳에�?모든 상호작용�?관리합니다."
+      },
+      "distribution": {
+        "title": "적극적인 참여",
+        "description": "트렌�?대화에 참여하고 잠재 고객�?연결하세�? 수동적인 운영�?능동적인 트래�?성장으로 전환합니�?"
+      }
+    },
+    "carouselHint": "스크�?휠로 이미지 전환"
+  },
+  "upcomingSection": {
+    "badge": "�?출시",
+    "title": "풀스택 AI 기반 콘텐�?성장 & 수익�?플랫�?,
+    "titleBlue": "�?출시�?기능, 기대�?주세�?,
+    "features": {
+      "smartImport": {
+        "title": "스마�?가져오�?,
+        "description": "빠른 재편�?�?재배포를 위해 기존 콘텐츠를 가져옵니다. �? 샤오홍슈 게시물을 원클릭으�?YouTube�?동기화합니다."
+      },
+      "analytics": {
+        "title": "콘텐�?분석 �?풀퍼널 데이�?,
+        "description": "크로�?플랫�?비교: �?플랫폼이 트래픽을 차단해도 다른 플랫폼은 차단하지 않습니다. 종단 �?모니터링: 성과�?추적하고 100�?이상 팔로워까지�?경로�?구축합니�?"
+      },
+      "aiCreation": {
+        "title": "AI 콘텐�?제작 �?종단 �?어시스턴�?,
+        "description": "AI 카피라이�? 제목, 캡션 �?설명�?자동 생성합니�? AI 댓글: 적극적으�?참여하고 트래픽을 유도합니�? 이미지 �?카드 생성�? 콘텐�?워크플로우를 가속화합니�? 지원되�?AI 비디�?모델 �?이미지 모델."
+      },
+      "marketplace": {
+        "title": "콘텐�?마켓플레이스 �?거래 & 수익�?,
+        "description": "크리에이�? 콘텐츠를 직접 판매하고 구매자를 빠르�?찾으세요. 브랜�? 기성�?고품�?콘텐츠를 구매하세�? AI 기반 성장: AI�?사용하여 수익�?올립시다. 함께 돈을 벌어�?"
+      }
+    }
+  },
+  "downloadSection": {
+    "title": "언제 어디서나 창작�?시작하세�?,
+    "titleBlue": "모바일에서도 쉽게 관�?,
+    "description": "AI ToEarn 모바�?앱으�?창의력은 �?이상 데스크톱�?제한되지 않습니다. iOS �?Android 모바�?앱을 제공하여 스마트폰 하나�?언제 어디서나 창의력을 발휘�?�?있습니다!",
+    "qrCodeText": "QR 코드�?스캔하여 다운로드",
+    "appStore": {
+      "text": "다운로드",
+      "store": "App Store"
+    },
+    "googlePlay": {
+      "text": "다운로드",
+      "store": "Google Play"
+    }
+  },
+  "enterpriseSection": {
+    "badge": "기업 서비�?,
+    "title": "전문적인 AI 소셜 미디�?솔루�?,
+    "titleBlue": "기업 마케�?성공 지�?,
+    "subtitle": "기업 AI 마케�?전환에는 도구뿐만 아니�?견고�?인프라가 필요합니�? AI ToEarn은 비교�?�?없는 마케�?효율성을 위해 AI 콘텐�?제작 기능�?여러 부서에 배포�?�?있는 신뢰�?�?있는 플랫폼을 제공합니�?"
+  },
+  "statsSection": {
+    "stats": {
+      "users": {
+        "number": "50K+",
+        "label": "사용�?
+      },
+      "platforms": {
+        "number": "15+",
+        "label": "소셜 플랫�?
+      },
+      "countries": {
+        "number": "100+",
+        "label": "국가"
+      },
+      "content": {
+        "number": "5M+",
+        "label": "게시�?콘텐�?
+      }
+    },
+    "testimonial": {
+      "quote": "오늘�?치열�?경쟁�?콘텐�?마케�?환경에서 빠른 검증과 제작 도구�?단순�?도움�?되는 것이 아니�?생존�?필수적입니다. 우리와 같은 마케�?회사에게 AI ToEarn은 �?AI 최전선에�?없어서는 �?�?가치를 제공합니�?",
+      "author": "김철수",
+      "title": "선도 MCN 에이전시 콘텐�?운영 이사"
+    },
+    "caseStudies": {
+      "timeSaved": {
+        "title": "연간 콘텐�?제작 시간 절약 추정",
+        "number": "50,000시간"
+      },
+      "aiAssistant": {
+        "title": "AI 마케�?어시스턴�? 크로�?플랫�?콘텐�?배포�?500�?이상�?기업 고객에게 서비�?제공"
+      }
+    }
+  },
+  "communitySection": {
+    "badge": "커뮤니티 생태�?,
+    "title": "우리�?,
+    "titleBlue": "활발�?크리에이�?커뮤니티",
+    "subtitle": "AI ToEarn은 글로벌 AI 콘텐�?크리에이�?커뮤니티�?의해 운영됩니�? AI 콘텐�?마케팅의 무한�?가능성�?함께 탐색하세�?",
+    "buttons": {
+      "wechat": "위챗 그룹",
+      "community": "크리에이�?커뮤니티"
+    },
+    "wechatPopup": "QR 코드�?스캔하여 위챗 공식 계정 팔로�?,
+    "communityPopup": "QR 코드�?스캔하여 커뮤니티 그룹 참여",
+    "stats": {
+      "downloads": {
+        "number": "200K+",
+        "label": "다운로드"
+      },
+      "members": {
+        "number": "15K",
+        "label": "커뮤니티 멤버"
+      },
+      "creators": {
+        "number": "500+",
+        "label": "활발�?크리에이�?
+      }
+    }
+  },
+  "footer": {
+    "resources": {
+      "title": "리소�?,
+      "links": {
+        "docs": "문서",
+        "blog": "블로�?,
+        "download": "다운로드",
+        "education": "교육",
+        "partner": "파트�?,
+        "support": "지�?,
+        "roadmap": "로드�?
+      }
+    },
+    "company": {
+      "title": "회사",
+      "links": {
+        "talk": "문의하기",
+        "terms": "서비�?이용약관",
+        "privacy": "개인정보 처리방침",
+        "cookies": "쿠키 설정",
+        "data": "데이�?보호 계약",
+        "marketplace": "마켓플레이스 계약",
+        "brand": "브랜�?가이드라인"
+      }
+    },
+    "description": "AI ToEarn 원스�?소셜 미디�?관�?플랫�?솔루�? 창작 영감에서 콘텐�?제작, 콘텐�?배포에서 콘텐�?상호작용 관리까지",
+    "social": {
+      "github": "GitHub",
+      "discord": "Discord",
+      "youtube": "YouTube",
+      "linkedin": "LinkedIn",
+      "twitter": "Twitter"
+    },
+    "bigText": "Let's Use AI To",
+    "copyright": "© 2025 VideoFlow, Corp.",
+    "tagline": "",
+    "dataDeletion": {
+      "title": "데이�?삭제 안내",
+      "prelaunch": "현재 애플리케이션은 출시 �?단계이며 실제 사용�?데이터를 저장하지 않습니다. 테스�?시스템과 상호작용�?경우 데이�?제거�?위해 문의�?주세�?",
+      "standardTitle": "표준 절차 (출시 �?:",
+      "standardSteps": [
+        "VideoFlow 계정�?로그�?,
+        "설정 > 개인정보�?이동",
+        "\"계정 삭제 요청\" 클릭",
+        "등록�?이메일로 확인�?전송됩니�?
+      ],
+      "contactTitle": "도움�?위한 연락�?",
+      "contactEmail": "이메�? metat@VideoFlowing.com (출시 �?문의�?"
+    }
+  },
+  "ecosystem": {
+    "analyze": "Content Analysis",
+    "analyzeDesc": "Global trends & creative inspiration",
+    "analyzeDetails": [
+      "Global Trending Topics",
+      "Creative Inspiration"
+    ],
+    "buy": "Buy",
+    "consumer": "Content Consumer",
+    "create": "Content Creation",
+    "createDesc": "AI generates video, images, copy",
+    "createDetails": [
+      "Video Generation: Veo3.1, Sora-2",
+      "Image Generation & Editing: Nano banana Pro, GPT-image-1.5",
+      "Video Editing: Composition, mixing, rotation, splitting, speed, cropping, transitions, effects, audio, text, filters & more",
+      "Video Understanding: Multimodal AI-based video comprehension",
+      "Video Style Transfer: Transform real videos into anime, cartoon, or sketch styles",
+      "Video Translation: Voice cloning, lip-sync, supporting Chinese, English, Japanese, Korean, German, French, Russian, Thai, Spanish, Portuguese, Italian & more",
+      "Smart Clipping: Intelligently extract highlights from dramas, TV shows, livestreams & long videos"
+    ],
+    "creator": "Content Creator",
+    "dashboard": "Data Dashboard",
+    "dashboardDesc": "Unified data analytics across platforms",
+    "dashboardDetails": [
+      "Unified data analytics across all platforms"
+    ],
+    "features": {
+      "clip": "Smart Clipping: Intelligently extract highlights from dramas, TV shows, livestreams & long videos",
+      "edit": "Video Editing: Composition, mixing, rotation, splitting, speed, cropping, transitions, effects, audio, text, filters & more",
+      "image": "Image Generation & Editing: Nano banana Pro, GPT-image-1.5",
+      "style": "Video Style Transfer: Transform real videos into anime, cartoon, or sketch styles",
+      "translate": "Video Translation: Voice cloning, lip-sync, supporting Chinese, English, Japanese, Korean, German, French, Russian, Thai, Spanish, Portuguese, Italian & more",
+      "understand": "Video Understanding: Multimodal AI-based video comprehension",
+      "video": "Video Generation: Veo3.1, Sora-2"
+    },
+    "manage": "Content Management",
+    "manageDesc": "Auto likes, bookmarks, comments",
+    "manageDetails": [
+      "Automatically like, bookmark, and comment on specific content"
+    ],
+    "platforms": "Supported Platforms",
+    "publish": "Content Publishing",
+    "publishDesc": "One-click multi-platform distribution",
+    "publishDetails": [
+      "Douyin, Xiaohongshu (Rednote), WeChat Video, Kuaishou, Bilibili, WeChat Official Account",
+      "TikTok, YouTube, Facebook, Instagram, Threads, Twitter (X), Pinterest, LinkedIn"
+    ],
+    "sell": "Sell",
+    "subtitle": "AI-Powered Content Creation & Monetization Ecosystem",
+    "title": "Understanding VideoFlow",
+    "trade": "Content Trading"
+  }
+}

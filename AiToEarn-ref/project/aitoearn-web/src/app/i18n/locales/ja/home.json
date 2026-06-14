@@ -1,0 +1,470 @@
+{
+  "dropToUpload": "ドロップしてアップロード",
+  "announcement": {
+    "text": "VideoFlowはAgentを使用してすべてのコンテンツニーズに対応します。実行中に多くのツールを呼び出すため、時間がかかる場合があります。いつでも終了して、後でタスクの進捗を確認できます�?
+  },
+  "releaseBanner": {
+    "tag": "リリース v0.8.0",
+    "text": "プラグインと活発なマーケットプレイスでAIワークフローを構築・拡張�?
+  },
+  "header": {
+    "logo": "VideoFlow",
+    "nav": {
+      "home": "ホー�?,
+      "marketplace": "マーケットプレイ�?,
+      "pricing": "料金",
+      "status": "ステータ�?,
+      "docs": "ドキュメント",
+      "blog": "ブロ�?,
+      "download": "ダウンロー�?,
+      "brand": "ブランド",
+      "resources": "リソース"
+    },
+    "getStarted": "始め�?
+  },
+  "hero": {
+    "stars": "1.0k",
+    "starsText": "スタ�?,
+    "github": "GitHub",
+    "title": "最高のコンテンツマーケティング\nAIエージェント",
+    "subtitle": "今日から、AIで簡単にソーシャルメディアを管理しましょう。VideoFlowは、クリエイティブなインスピレーションからコンテンツ作成、コンテンツ配信、コンテンツインタラクション管理まで、ワンストップの機能を提供し、AIをより身近なものにします�?,
+    "getStarted": "始め�?,
+    "useMobilePhone": "モバイルで使�?
+  },
+  "seo": {
+    "title": "AI動画・コンテンツ制作 - 15以上のSNSに一括投�?,
+    "description": "VideoFlowはAI搭載のSNS運営アシスタントです。AIで動画・画像・コピーを生成し、TikTok、YouTube、Instagram、Facebookなど15以上のプラットフォームにワンクリックで配信。AIコンテンツ制作、スマート編集、スタイル変換、動画翻訳、トレンド発見、ブランド監視、統合エンゲージメント管理を提供します�?,
+    "keywords": "AIコンテンツマーケティング, AIソーシャルメディア管�? AI動画生成, マルチプラットフォーム配�? AIコンテンツ制�? SNS自動�? TikTokマーケティン�? YouTubeマーケティン�? AIエージェント, コンテンツ配�? AI文章作成, 動画編集AI, ブランド監視, VideoFlow"
+  },
+  "agentGenerator": {
+    "title": "何かお手伝いできますか？",
+    "subtitle": "あなたのAI運営スタッフ"
+  },
+  "aiGeneration": {
+    "inputPlaceholder": "コンテンツのアイデアを入力すると、AIが完全な作品を生成します...",
+    "generateButton": "作成開始",
+    "generating": "作成�?..",
+    "emptyPromptAlert": "コンテンツ生成のプロンプトを入力してください",
+    "createTaskFailed": "タスクの作成に失敗しまし�?,
+    "uploadSuccess": "画像のアップロードに成功しました",
+    "uploadFailed": "画像のアップロードに失敗しました。もう一度お試しください",
+    "taskCreatedSuccess": "タスクが正常に作成されました",
+    "thinking": "AI思考中...",
+    "topicPrefix": "作成トピック�?,
+    "generatedTitlePrefix": "生成されたタイトル：",
+    "descriptionPrefix": "📄 ",
+    "failedReasonPrefix": "失敗理由�?,
+    "taskTimeout": "タスクがタイムアウトしました。後でもう一度お試しください",
+    "unknownError": "不明なエラー",
+    "status": {
+      "thinking": "AI思考中...",
+      "waiting": "待機�?..",
+      "generatingContent": "コンテンツ生成中",
+      "generatingImage": "画像生成�?,
+      "generatingVideo": "動画生成�?,
+      "generatingText": "テキスト生成�?,
+      "completed": "完了�?,
+      "failed": "失敗",
+      "cancelled": "キャンセル済�?
+    },
+    "channelAuthRequired": "まずチャンネルを追加して認証してください",
+    "channelAuthExpired": "チャンネルの認証が期限切れです。再認証してください",
+    "channelNotSupported": "このプラットフォームは直接公開をサポートしていません",
+    "taskStopped": "生成が停止されました",
+    "stopTaskFailed": "タスクの停止に失敗しまし�?,
+    "newConversation": "新しい会話が開始されまし�?,
+    "generatingWarning": "生成中です。まず現在のタスクを停止してください",
+    "conversationId": "会話ID",
+    "startNewConversation": "新しい会話を開始",
+    "currentCost": "現在のコスト",
+    "aiGenerationProcess": "AI生成プロセス",
+    "waitingAiResponse": "AIの応答を待っています...",
+    "uploadImage": "画像をアップロー�?,
+    "removeImage": "画像を削�?,
+    "agentMode": "エージェントモー�?,
+    "imageGeneration": "画像生成",
+    "videoGeneration": "動画生成",
+    "draftBox": "下書きボック�?,
+    "batchPublish": "一括公�?,
+    "stopGeneration": "生成を停�?,
+    "sendMessage": "メッセージを送信",
+    "inspirationPrompt": "インスピレーションが浮かびましたか？一文で作成を始めましょ�?,
+    "onboardingTitle": "作成の始め方がわかりませんか�?,
+    "onboardingDescription": "一文で作成を始めましょ�?,
+    "gotIt": "了解",
+    "saveDraftFailed": "下書きの保存に失敗しまし�?,
+    "saveDraftSuccess": "下書きが正常に保存されました",
+    "noDraftGroupFound": "利用可能な下書きグループが見つかりません。まずグループを作成してください",
+    "noDraftGroup": "利用可能な下書きグループが見つかりません",
+    "needAddChannel": "チャンネルの追加が必要で�?,
+    "channelNotAdded": "{platform}チャンネルがまだ追加されていません。追加しますか？",
+    "goAdd": "追加する",
+    "cancel": "キャンセ�?,
+    "channelAuthExpiredTitle": "チャンネル認証の期限切れ",
+    "channelAuthExpiredContent": "チャンネルの認証が期限切れです。再認証しますか�?,
+    "reauthorize": "再認�?,
+    "needLoginChannel": "チャンネルへのログインが必要です",
+    "needLogin": "ログインが必要で�?,
+    "pleaseLoginChannel": "まずこのチャンネルアカウントにログインしてくださ�?,
+    "goLogin": "ログインする",
+    "needBindChannel": "チャンネルを接続",
+    "needBindChannelTitle": "チャンネルを接続",
+    "needBindChannelContent": "{{platform}}アカウントが見つかりません。公開するには{{platform}}アカウントを追加してください�?,
+    "goBind": "チャンネルを追加",
+    "platformRequiresPlugin": "このプラットフォームはプラグイン公開が必要です。まずプラグインを認証してくださ�?,
+    "needAuthorizePlugin": "プラグインの認証が必要で�?,
+    "pluginAuthorizeDescription": "このプラットフォームはプラグイン公開が必要です。ここをクリックしてプラグインを認証してください",
+    "noAccountFound": "このプラットフォームのアカウントが見つかりません。まずアカウントを追加してくださ�?,
+    "publishTaskSubmitted": "公開タスクがプラグインに送信されまし�?,
+    "publishingViaPlugin": "プラグイン経由で公開�?..",
+    "pluginPublishFailed": "プラグイン公開に失敗しました"
+  },
+  "plugin": {
+    "platformNeedsPlugin": "このプラットフォームはプラグイン公開が必要です。まずプラグインを認証してくださ�?,
+    "authorizePluginTitle": "プラグインの認証が必要で�?,
+    "authorizePluginDescription": "このプラットフォームはプラグイン公開が必要です。ここをクリックしてプラグインを認証してください",
+    "noAccountFound": "このプラットフォームのアカウントが見つかりません。まずアカウントを追加してくださ�?,
+    "publishTaskSubmitted": "公開タスクがプラグインに送信されまし�?,
+    "publishingViaPlugin": "プラグイン経由で公開�?..",
+    "publishFailed": "プラグイン公開に失敗しました"
+  },
+  "status": {
+    "generatingInProcess": "生成中です。まず現在のタスクを停止してください",
+    "stopGenerating": "生成を停�?,
+    "sendMessage": "メッセージを送信"
+  },
+  "messages": {
+    "generatingInProcessStopFirst": "生成中です。まず現在のタスクを停止してください",
+    "newConversationStarted": "新しい会話が開始されまし�?,
+    "draftSavedSuccessfully": "下書きが正常に保存されました",
+    "saveDraftFailed": "下書きの保存に失敗しまし�?,
+    "noDraftGroupFound": "利用可能な下書きグループが見つかりません。まずグループを作成してください",
+    "createDraftGroupFirst": "利用可能な下書きグループが見つかりません"
+  },
+  "platformNames": {
+    "douyin": "抖音",
+    "xhs": "小紅�?,
+    "wxSph": "微信ビデオアカウント",
+    "KWAI": "快手",
+    "youtube": "YouTube",
+    "wxGzh": "微信公式アカウン�?,
+    "bilibili": "ビリビリ",
+    "twitter": "Twitter",
+    "tiktok": "TikTok",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "threads": "Threads",
+    "pinterest": "Pinterest",
+    "linkedin": "LinkedIn"
+  },
+  "channel": {
+    "addChannelRequiredTitle": "チャンネルの追加が必要で�?,
+    "addChannelRequiredContent": "{platform}チャンネルがまだ追加されていません。追加しますか？",
+    "goToAdd": "追加する",
+    "authExpiredTitle": "チャンネル認証の期限切れ",
+    "authExpiredContent": "チャンネルの認証が期限切れです。再認証しますか�?,
+    "reauthorize": "再認�?,
+    "loginRequiredTitle": "チャンネルへのログインが必要です",
+    "loginRequiredContent": "まずこのチャンネルアカウントにログインしてくださ�?,
+    "goToLogin": "ログインする"
+  },
+  "guide": {
+    "aiInputTitle": "作成の始め方がわかりませんか�?,
+    "aiInputDescription": "一文で作成を始めましょ�?
+  },
+  "download": {
+    "downloadNow": "今すぐダウンロー�?
+  },
+  "wechat": {
+    "officialAccount": "微信公式アカウン�?,
+    "communityOfficialAccount": "コミュニティ公式アカウン�?
+  },
+  "brandBar": {
+    "title": "対応ソーシャルメディアプラットフォー�?
+  },
+  "buildSection": {
+    "badge": "機能1",
+    "title": "コンテンツ公�?,
+    "titleBlue": " �?ワンクリックでマルチプラットフォーム",
+    "features": {
+      "hotTopic": {
+        "title": "どこでも配信",
+        "description": "世界中の幅広いプラットフォームに公開（抖音、快手、微信、ビリビリ、小紅書、Facebook、Instagram、TikTok、LinkedIn、Threads、YouTube、Pinterest、X）�?
+      },
+      "international": {
+        "title": "カレンダースケジューラー",
+        "description": "すべてのプラットフォームでカレンダーのようにコンテンツを計画・調整。統合ダッシュボード：すべてのインタラクションを一箇所で管理�?
+      }
+    },
+    "carouselHint": "スクロールホイールで画像を切り替�?
+  },
+  "hotspotSection": {
+    "badge": "機能2",
+    "title": "コンテンツホットスポット �?バイラルインスピレーションエンジ�?,
+    "titleBlue": "事例ライブラリ＆トレンドレーダ�?,
+    "features": {
+      "hotTopic": {
+        "title": "事例ライブラ�?,
+        "description": "10,000以上のいいねを獲得した投稿の作り方を探索�?
+      },
+      "international": {
+        "title": "トレンドレーダ�?,
+        "description": "最新のバイラルトレンドを即座に発見し、クリエイターの不安を軽減�?
+      }
+    },
+    "carouselHint": "スクロールホイールで画像を切り替�?
+  },
+  "searchSection": {
+    "badge": "機能3",
+    "title": "コンテンツ検�?�?ブランド＆市場インサイト",
+    "titleBlue": "ブランドモニタリング＆コンテンツ発見",
+    "features": {
+      "hotTopic": {
+        "title": "ブランドモニタリング",
+        "description": "ブランドに関する会話をリアルタイムで追跡�?
+      },
+      "international": {
+        "title": "コンテンツ発�?,
+        "description": "ターゲットエンゲージメントのための投稿、トピック、コミュニティを検索�?
+      }
+    },
+    "carouselHint": "スクロールホイールで画像を切り替�?
+  },
+  "commentsSection": {
+    "badge": "機能4",
+    "title": "コメント検索 �?精密ユーザーマイニン�?,
+    "titleBlue": "スマートコメント検索＆コンバージョンブースタ�?,
+    "features": {
+      "hotTopic": {
+        "title": "スマートコメント検索",
+        "description": "「リンクください」や「購入方法」などの高コンバージョンシグナルを検出�?
+      },
+      "international": {
+        "title": "コンバージョンブースター",
+        "description": "即座に返信し、より高いエンゲージメントと売上を促進�?
+      }
+    },
+    "carouselHint": "スクロールホイールで画像を切り替�?
+  },
+  "connectSection": {
+    "badge": "機能5",
+    "title": "コンテンツエンゲージメン�?�?成長エンジン",
+    "titleBlue": "統合ダッシュボード＆プロアクティブエンゲージメント",
+    "features": {
+      "creation": {
+        "title": "統合ダッシュボード",
+        "description": "すべてのインタラクションを一箇所で管理�?
+      },
+      "distribution": {
+        "title": "プロアクティブエンゲージメン�?,
+        "description": "トレンドの会話に参加し、潜在顧客とつながる。受動的な運営を能動的なトラフィック成長に変換�?
+      }
+    },
+    "carouselHint": "スクロールホイールで画像を切り替�?
+  },
+  "upcomingSection": {
+    "badge": "近日公開",
+    "title": "フルスタックAI搭載コンテンツ成長＆収益化プラットフォー�?,
+    "titleBlue": "近日公開予定の機能、お楽しみに",
+    "features": {
+      "smartImport": {
+        "title": "スマートインポー�?,
+        "description": "履歴コンテンツをインポートして、素早く再編集・再配信。例：小紅書の投稿をワンクリックでYouTubeに同期�?
+      },
+      "analytics": {
+        "title": "コンテンツ分�?�?フルファネルデー�?,
+        "description": "クロスプラットフォーム比較：1つのプラットフォームがトラフィックをブロックしても、他はブロックしません。エンドツーエンドモニタリング：パフォーマンスを追跡し�?00万フォロワー以上への道を構築�?
+      },
+      "aiCreation": {
+        "title": "AIコンテンツ作�?�?エンドツーエンドアシスタント",
+        "description": "AIコピーライティング：タイトル、キャプション、説明を自動生成。AIコメント：プロアクティブにエンゲージし、トラフィックを集める。画像＆カードジェネレーター：コンテンツワークフローを高速化。対応AIビデオモデルと画像モデル�?
+      },
+      "marketplace": {
+        "title": "コンテンツマーケットプレイス �?取引＆収益化",
+        "description": "クリエイター：コンテンツを直接販売し、素早く買い手を見つける。ブランド：既製の高品質コンテンツを購入。AI搭載成長：AIを使って稼ごう。一緒にお金を稼ごう�?
+      }
+    }
+  },
+  "downloadSection": {
+    "title": "いつでもどこでも作成を開�?,
+    "titleBlue": "モバイルでも簡単管理",
+    "description": "AI ToEarnモバイルアプリで、クリエイティビティはもうデスクトップに限定されません。iOSとAndroidのモバイルアプリも提供しており、スマホ1台でいつでもどこでもクリエイティビティを発揮できます�?,
+    "qrCodeText": "QRコードをスキャンしてダウンロー�?,
+    "appStore": {
+      "text": "でダウンロー�?,
+      "store": "App Store"
+    },
+    "googlePlay": {
+      "text": "GET IT ON",
+      "store": "Google Play"
+    }
+  },
+  "enterpriseSection": {
+    "badge": "エンタープライズサービス",
+    "title": "プロフェッショナルAIソーシャルメディアソリューション",
+    "titleBlue": "エンタープライズマーケティングの成功を支�?,
+    "subtitle": "エンタープライズAIマーケティング変革には、ツールだけでなく、堅実なインフラストラクチャが必要です。AI ToEarnは、比類のないマーケティング効率のために、AIコンテンツ作成機能を複数の部門に配布する信頼性の高いプラットフォームを提供します�?
+  },
+  "statsSection": {
+    "stats": {
+      "users": {
+        "number": "50K+",
+        "label": "ユーザー"
+      },
+      "platforms": {
+        "number": "15+",
+        "label": "ソーシャルプラットフォー�?
+      },
+      "countries": {
+        "number": "100+",
+        "label": "�?
+      },
+      "content": {
+        "number": "5M+",
+        "label": "公開コンテン�?
+      }
+    },
+    "testimonial": {
+      "quote": "今日の競争の激しいコンテンツマーケティング環境では、迅速な検証と作成ツールは役立つだけでなく、生き残りに不可欠です。私たちのようなマーケティング会社にとって、AI ToEarnはこのAIフロンティアにおいてかけがえのない価値を提供します�?,
+      "author": "ジョン・スミ�?,
+      "title": "大手MCNエージェンシ�?コンテンツオペレーションディレクター"
+    },
+    "caseStudies": {
+      "timeSaved": {
+        "title": "推定年間コンテンツ作成時間削�?,
+        "number": "50,000時間"
+      },
+      "aiAssistant": {
+        "title": "AIマーケティングアシスタント：500以上の企業クライアントにクロスプラットフォームコンテンツ配信を提�?
+      }
+    }
+  },
+  "communitySection": {
+    "badge": "コミュニティエコシステム",
+    "title": "参加しよ�?,
+    "titleBlue": "活発なクリエイターコミュニテ�?,
+    "subtitle": "AI ToEarnは、AIコンテンツクリエイターのグローバルコミュニティによって支えられています。私たちと一緒にAIコンテンツマーケティングの無限の可能性を探求しましょう�?,
+    "buttons": {
+      "wechat": "WeChatグループ",
+      "community": "クリエイターコミュニティ"
+    },
+    "wechatPopup": "QRコードをスキャンして微信公式アカウントをフォロー",
+    "communityPopup": "QRコードをスキャンしてコミュニティグループに参�?,
+    "stats": {
+      "downloads": {
+        "number": "200K+",
+        "label": "ダウンロー�?
+      },
+      "members": {
+        "number": "15K",
+        "label": "コミュニティメンバー"
+      },
+      "creators": {
+        "number": "500+",
+        "label": "アクティブクリエイタ�?
+      }
+    }
+  },
+  "footer": {
+    "resources": {
+      "title": "リソース",
+      "links": {
+        "docs": "ドキュメント",
+        "blog": "ブロ�?,
+        "download": "ダウンロー�?,
+        "education": "教育",
+        "partner": "パートナ�?,
+        "support": "サポート",
+        "roadmap": "ロードマップ"
+      }
+    },
+    "company": {
+      "title": "会社",
+      "links": {
+        "talk": "お問い合わせ",
+        "terms": "利用規約",
+        "privacy": "プライバシーポリシー",
+        "cookies": "Cookie設定",
+        "data": "データ保護契�?,
+        "marketplace": "マーケットプレイス契�?,
+        "brand": "ブランドガイドライン"
+      }
+    },
+    "description": "AI ToEarnワンストップソーシャルメディア管理プラットフォームソリューション、クリエイティブなインスピレーションからコンテンツ作成、コンテンツ配信からコンテンツインタラクション管理ま�?,
+    "social": {
+      "github": "GitHub",
+      "discord": "Discord",
+      "youtube": "YouTube",
+      "linkedin": "LinkedIn",
+      "twitter": "Twitter"
+    },
+    "bigText": "Let's Use AI To",
+    "copyright": "© 2025 VideoFlow, Corp.",
+    "tagline": "",
+    "dataDeletion": {
+      "title": "データ削除手�?,
+      "prelaunch": "当アプリケーションは現在プレローンチ段階であり、実際のユーザーデータは保存していません。テストシステムとのやり取りがある場合は、データ削除についてお問い合わせください�?,
+      "standardTitle": "標準手順（ローンチ後）：",
+      "standardSteps": [
+        "VideoFlowアカウントにログイン",
+        "設定 > プライバシーに移�?,
+        "「アカウント削除をリクエスト」をクリック",
+        "登録メールに確認が送信されます"
+      ],
+      "contactTitle": "サポートへのお問い合わせ�?,
+      "contactEmail": "メール：metat@VideoFlowing.com（プレローンチのお問い合わせのみ�?
+    }
+  },
+  "ecosystem": {
+    "analyze": "Content Analysis",
+    "analyzeDesc": "Global trends & creative inspiration",
+    "analyzeDetails": [
+      "Global Trending Topics",
+      "Creative Inspiration"
+    ],
+    "buy": "Buy",
+    "consumer": "Content Consumer",
+    "create": "Content Creation",
+    "createDesc": "AI generates video, images, copy",
+    "createDetails": [
+      "Video Generation: Veo3.1, Sora-2",
+      "Image Generation & Editing: Nano banana Pro, GPT-image-1.5",
+      "Video Editing: Composition, mixing, rotation, splitting, speed, cropping, transitions, effects, audio, text, filters & more",
+      "Video Understanding: Multimodal AI-based video comprehension",
+      "Video Style Transfer: Transform real videos into anime, cartoon, or sketch styles",
+      "Video Translation: Voice cloning, lip-sync, supporting Chinese, English, Japanese, Korean, German, French, Russian, Thai, Spanish, Portuguese, Italian & more",
+      "Smart Clipping: Intelligently extract highlights from dramas, TV shows, livestreams & long videos"
+    ],
+    "creator": "Content Creator",
+    "dashboard": "Data Dashboard",
+    "dashboardDesc": "Unified data analytics across platforms",
+    "dashboardDetails": [
+      "Unified data analytics across all platforms"
+    ],
+    "features": {
+      "clip": "Smart Clipping: Intelligently extract highlights from dramas, TV shows, livestreams & long videos",
+      "edit": "Video Editing: Composition, mixing, rotation, splitting, speed, cropping, transitions, effects, audio, text, filters & more",
+      "image": "Image Generation & Editing: Nano banana Pro, GPT-image-1.5",
+      "style": "Video Style Transfer: Transform real videos into anime, cartoon, or sketch styles",
+      "translate": "Video Translation: Voice cloning, lip-sync, supporting Chinese, English, Japanese, Korean, German, French, Russian, Thai, Spanish, Portuguese, Italian & more",
+      "understand": "Video Understanding: Multimodal AI-based video comprehension",
+      "video": "Video Generation: Veo3.1, Sora-2"
+    },
+    "manage": "Content Management",
+    "manageDesc": "Auto likes, bookmarks, comments",
+    "manageDetails": [
+      "Automatically like, bookmark, and comment on specific content"
+    ],
+    "platforms": "Supported Platforms",
+    "publish": "Content Publishing",
+    "publishDesc": "One-click multi-platform distribution",
+    "publishDetails": [
+      "Douyin, Xiaohongshu (Rednote), WeChat Video, Kuaishou, Bilibili, WeChat Official Account",
+      "TikTok, YouTube, Facebook, Instagram, Threads, Twitter (X), Pinterest, LinkedIn"
+    ],
+    "sell": "Sell",
+    "subtitle": "AI-Powered Content Creation & Monetization Ecosystem",
+    "title": "Understanding VideoFlow",
+    "trade": "Content Trading"
+  }
+}

@@ -1,0 +1,71 @@
+# ===== Node.js =====
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+
+# ===== Build outputs =====
+dist/
+build/
+*.tsbuildinfo
+
+# ===== Environment & secrets =====
+.env
+.env.local
+.env.*.local
+*.log
+
+# ===== Database data =====
+mongodb-data/
+dump.rdb
+mongodb-7.0/
+mongodb-7.0.zip
+
+# ===== Redis binaries =====
+redis/
+
+# ===== Temporary & debug files =====
+fix_*.js
+fix_*.ts
+login-check.js
+login-debug.png
+temp_pub.txt
+videoflow-token.txt
+
+# ===== Large media / assets (reinstall as needed) =====
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.mkv
+*.flv
+*.gif
+*.ttf
+*.woff
+*.woff2
+*.eot
+*.ico
+
+# AiToEarn large brand promo images (>800KB)
+AiToEarn-ref/project/aitoearn-web/public/assets/brand-promo-guides/
+
+# ===== AiToEarn git backup =====
+AiToEarn-ref/.git_backup/
+
+# ===== OS files =====
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ===== IDE =====
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===== Playwright =====
+test-results/
+playwright-report/
+storage_states/
+
+# ===== Uploads =====
+uploads/
